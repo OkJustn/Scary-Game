@@ -32,6 +32,7 @@ int main(void)
     Texture2D quitTex = LoadTexture("imgs/Quit_BTTN.png");    
     Texture2D resumeTex = LoadTexture("imgs/Resume_BTTN.png");    
     Texture2D startBTNTex = LoadTexture("imgs/Rename_BTTN.png");    
+    Texture2D instructBgTex = LoadTexture("imgs/instructions.png");    
 
     Image     whiteImg  = GenImageColor(64, 64, (Color){ 200, 200, 200, 255 });
     Texture2D portalTex = LoadTextureFromImage(whiteImg);
@@ -68,6 +69,11 @@ int main(void)
                     DisableCursor();
                     currentScreen = GAME;
                 }
+
+                Rectangle instructdest = { 520, 430, (float)instructTex.width, (float)instructTex.height };
+                            if (CheckCollisionPointRec(mousePos, instructdest) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                                currentScreen = INSTRUCTIONS;
+                            }
                 
                 Rectangle quitdest = { 520, 530, (float)quitTex.width, (float)quitTex.height };
                 if (CheckCollisionPointRec(mousePos, quitdest) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -131,17 +137,21 @@ int main(void)
                 }
             }
             break;
+        case INSTRUCTIONS:
+            if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P)) {
+                    currentScreen = MENU;
+                }
+            break;
             
-            case PAUSE:
-
+        case PAUSE:
             if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P)) {
                         DisableCursor();
                         currentScreen = GAME;
                     }
-                    break;
+            break;
             
-            default:
-                break;
+        default:
+            break;
             }
 
         
@@ -182,8 +192,16 @@ int main(void)
                 }
             }
             break;
-
+            case INSTRUCTIONS:
+            {
+                if (IsCursorHidden()) EnableCursor();
+                Rectangle instsource = { 0, 0, (float)instructBgTex.width, (float)instructBgTex.height };
+                Rectangle instdest = { 0, 0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
+                DrawTexturePro(instructBgTex, instsource, instdest, (Vector2){0,0}, 0.0f, WHITE);
+                break;
+            }
             case GAME:
+  
             case PAUSE:
             {
             if (!state.gameOver)
@@ -260,6 +278,7 @@ int main(void)
     UnloadTexture(quitTex);
     UnloadTexture(backgroundTex);
     UnloadTexture(gameOverTex);
+    UnloadTexture(instructBgTex);
 
 
     UnloadAudioAssets(&audio);

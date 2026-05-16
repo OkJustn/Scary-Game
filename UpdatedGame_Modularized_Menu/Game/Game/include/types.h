@@ -61,6 +61,7 @@ typedef enum GameScreen {
     GAME,
     PAUSE,
     GAMEOVER,
+    INSTRUCTIONS
 } GameScreen;
 
 
